@@ -122,11 +122,11 @@ extensions = [
     CUDAExtension(
         "awq_ext",
         [
-            "awq_cuda/pybind_awq.cpp",
-            "awq_cuda/quantization/gemm_cuda_gen.cu",
-            "awq_cuda/layernorm/layernorm.cu",
-            "awq_cuda/position_embedding/pos_encoding_kernels.cu",
-            "awq_cuda/quantization/gemv_cuda.cu"
+            "awq_ext/pybind_awq.cpp",
+            "awq_ext/quantization/gemm_cuda_gen.cu",
+            "awq_ext/layernorm/layernorm.cu",
+            "awq_ext/position_embedding/pos_encoding_kernels.cu",
+            "awq_ext/quantization/gemv_cuda.cu"
         ], extra_compile_args=extra_compile_args
     )
 ]
@@ -136,9 +136,9 @@ if os.name != "nt":
         CUDAExtension(
             "awq_ft_ext",
             [
-                "awq_cuda/pybind_awq_ft.cpp",
-                "awq_cuda/attention/ft_attention.cpp",
-                "awq_cuda/attention/decoder_masked_multihead_attention.cu"
+                "awq_ext/pybind_awq_ft.cpp",
+                "awq_ext/attention/ft_attention.cpp",
+                "awq_ext/attention/decoder_masked_multihead_attention.cu"
             ], extra_compile_args=extra_compile_args
         )
     )
