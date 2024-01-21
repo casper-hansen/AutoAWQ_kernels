@@ -105,6 +105,7 @@ def get_compute_capabilities():
 
 
 check_dependencies()
+extra_link_args = []
 include_dirs = get_include_dirs()
 generator_flags = get_generator_flag()
 arch_flags = get_compute_capabilities()
@@ -117,6 +118,9 @@ if os.name == "nt":
         extra_compile_args = {"nvcc": arch_flags}
     else:
         extra_compile_args = {}
+    
+    cuda_path = os.environ.get("CUDA_PATH", None)
+    extra_link_args = ["-L", f"{cuda_path}/lib/x64/cublas.lib"]
 else:
     extra_compile_args = {
         "cxx": ["-g", "-O3", "-fopenmp", "-lgomp", "-std=c++17", "-DENABLE_BF16"],
@@ -151,6 +155,7 @@ extensions = [
         extra_compile_args=extra_compile_args,
     )
 ]
+
 extensions.append(
     CUDAExtension(
         "exllama_kernels",
@@ -162,6 +167,7 @@ extensions.append(
             "awq_ext/exllama/cuda_func/q4_matrix.cu",
         ],
         extra_compile_args=extra_compile_args,
+        extra_link_args=extra_link_args,
     )
 )
 extensions.append(
@@ -173,6 +179,7 @@ extensions.append(
             "awq_ext/exllamav2/cuda/q_gemm.cu",
         ],
         extra_compile_args=extra_compile_args,
+        extra_link_args=extra_link_args,
     )
 )
 
