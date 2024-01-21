@@ -112,12 +112,22 @@ arch_flags = get_compute_capabilities()
 if os.name == "nt":
     include_arch = os.getenv("INCLUDE_ARCH", "1") == "1"
 
+    # On Windows, fix an error LNK2001: unresolved external symbol cublasHgemm bug in the compilation
+    cuda_path = os.environ.get("CUDA_PATH", None)
+    if cuda_path is None:
+        raise ValueError(
+            "The environment variable CUDA_PATH must be set to the path to the CUDA install when installing from source on Windows systems."
+        )
+
+    extra_link_args = ["-L", f"{cuda_path}/lib/x64/cublas.lib"]
+
     # Relaxed args on Windows
     if include_arch:
         extra_compile_args = {"nvcc": arch_flags}
     else:
         extra_compile_args = {}
 else:
+    extra_link_args = []
     extra_compile_args = {
         "cxx": ["-g", "-O3", "-fopenmp", "-lgomp", "-std=c++17", "-DENABLE_BF16"],
         "nvcc": [
@@ -161,7 +171,7 @@ extensions.append(
             "awq_ext/exllama/cuda_func/q4_matmul.cu",
             "awq_ext/exllama/cuda_func/q4_matrix.cu",
         ],
-        extra_compile_args=extra_compile_args,
+        include_dirs=include_dirs,
     )
 )
 extensions.append(
@@ -172,7 +182,7 @@ extensions.append(
             "awq_ext/exllamav2/cuda/q_matrix.cu",
             "awq_ext/exllamav2/cuda/q_gemm.cu",
         ],
-        extra_compile_args=extra_compile_args,
+        include_dirs=include_dirs,
     )
 )
 
