@@ -158,7 +158,7 @@ extensions = [
 
 extensions.append(
     CUDAExtension(
-        "exllama_kernels",
+        "exl_ext",
         [
             "awq_ext/exllama/exllama_ext.cpp",
             "awq_ext/exllama/cuda_buffers.cu",
@@ -172,7 +172,7 @@ extensions.append(
 )
 extensions.append(
     CUDAExtension(
-        "exllamav2_kernels",
+        "exlv2_ext",
         [
             "awq_ext/exllamav2/ext.cpp",
             "awq_ext/exllamav2/cuda/q_matrix.cu",
