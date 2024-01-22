@@ -19,7 +19,7 @@ if not PYPI_BUILD:
         CUDA_VERSION = "".join(CUDA_VERSION.split("."))[:3]
         AUTOAWQ_KERNELS_VERSION += f"+cu{CUDA_VERSION}"
     elif ROCM_VERSION:
-        ROCM_VERSION = "".join(ROCM_VERSION.split("."))[:2]
+        ROCM_VERSION = "".join(ROCM_VERSION.split("."))[:3]
         AUTOAWQ_KERNELS_VERSION += f"+rocm{ROCM_VERSION}"
     else:
         raise RuntimeError(
