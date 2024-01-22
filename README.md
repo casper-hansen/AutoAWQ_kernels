@@ -10,7 +10,7 @@ AutoAWQ Kernels is a new package that is split up from the [main repository](htt
   - GPU: Must be compute capability 7.5 or higher.
   - CUDA Toolkit: Must be 11.8 or higher.
 - AMD:
-  - ROCm: Must be 4.5 or higher.
+  - ROCm: Must be 5.6 or higher.
 
 ## Install
 
