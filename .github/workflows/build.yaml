@@ -127,8 +127,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-latest]
-        pyver: ["3.8", "3.9", "3.10", "3.11"]
+        os: [ubuntu-20.04]
+        python: ["3.8", "3.9", "3.10", "3.11"]
         rocm: ["5.6.1", "5.7.1"] # we build only for rocm5.6 & 5.7 to match PyTorch 2.1.0 and PyTorch 2.2 nightly
     defaults:
       run:
@@ -137,36 +137,50 @@ jobs:
       ROCM_VERSION: ${{ matrix.rocm }}
 
     steps:
-      - name: Free Disk Space
-        uses: jlumbroso/free-disk-space@v1.3.0
-        if: runner.os == 'Linux'
-        with:
-          tool-cache: false
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: false
-          docker-images: true
-          swap-storage: false
-
       - uses: actions/checkout@v3
+
+      - name: Free Disk Space
+        run: |
+          df -h
+          echo "Removing large packages"
+          sudo apt-get remove -y '^dotnet-.*'
+          sudo apt-get remove -y 'php.*'
+          sudo apt-get remove -y azure-cli google-chrome-stable firefox powershell mono-devel
+          df -h
+          sudo apt-get autoremove -y >/dev/null 2>&1
+          sudo apt-get clean
+          sudo apt-get autoremove -y >/dev/null 2>&1
+          sudo apt-get autoclean -y >/dev/null 2>&1
+          df -h
+          echo "https://github.com/actions/virtual-environments/issues/709"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          df -h
+          echo "remove big /usr/local"
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf /usr/local/lib/android >/dev/null 2>&1
+          df -h
+          sudo rm -rf /usr/share/dotnet/sdk > /dev/null 2>&1
+          sudo rm -rf /usr/share/dotnet/shared > /dev/null 2>&1
+          sudo rm -rf /usr/share/swift > /dev/null 2>&1
+          df -h
 
       - uses: actions/setup-python@v3
         with:
-          python-version: ${{ matrix.pyver }}
+          python-version: ${{ matrix.python }}
 
       - name: Setup Mamba
         uses: conda-incubator/setup-miniconda@v2.2.0
         with:
           activate-environment: "build"
-          python-version: ${{ matrix.pyver }}
-          miniforge-variant: Mambaforge
-          miniforge-version: latest
-          use-mamba: true
+          python-version: ${{ matrix.python }}
+          mamba-version: "*"
+          use-mamba: false
+          channels: conda-forge,defaults
+          channel-priority: true
           add-pip-as-python-dependency: true
           auto-activate-base: false
 
-      - name: Set Up ROCm
+      - name: Set up ROCm
         run: |
           echo "Using python:"
           python --version
@@ -205,7 +219,7 @@ jobs:
             exit 1
           fi
 
-      - name: Build wheels
+      - name: Build Wheel
         run: |
           echo "Using python for build:"
           python --version
