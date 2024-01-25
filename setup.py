@@ -110,18 +110,15 @@ def get_compute_capabilities():
     return capability_flags
 
 
-def get_extra_compile_args():
+def get_extra_compile_args(arch_flags, generator_flags):
     extra_compile_args = {}
 
     if os.name == "nt" and CUDA_VERSION:
         include_arch = os.getenv("INCLUDE_ARCH", "1") == "1"
-
         # Relaxed args on Windows
         if include_arch:
             extra_compile_args = {"nvcc": arch_flags}
 
-        cuda_path = os.environ.get("CUDA_PATH", None)
-        extra_link_args = ["-L", f"{cuda_path}/lib/x64/cublas.lib"]
     elif CUDA_VERSION:
         extra_compile_args = {
             "cxx": ["-g", "-O3", "-fopenmp", "-lgomp", "-std=c++17", "-DENABLE_BF16"],
@@ -146,15 +143,26 @@ def get_extra_compile_args():
     return extra_compile_args
 
 
-extensions = []
-extra_link_args = []
+def get_extra_link_args():
+    extra_link_args = []
+
+    if os.name == "nt" and CUDA_VERSION:
+        cuda_path = os.environ.get("CUDA_PATH", None)
+        extra_link_args = ["-L", f"{cuda_path}/lib/x64/cublas.lib"]
+
+    return extra_link_args
+
+
 include_dirs = get_include_dirs()
+extra_link_args = get_extra_link_args()
 generator_flags = get_generator_flag()
 arch_flags = get_compute_capabilities()
-extra_compile_args = get_extra_compile_args()
+extra_compile_args = get_extra_compile_args(arch_flags, generator_flags)
 
 
-if not ROCM_VERSION:
+extensions = []
+if CUDA_VERSION:
+    # contain un-hipifiable inline PTX
     extensions.append(
         CUDAExtension(
             "awq_ext",
@@ -196,7 +204,8 @@ extensions.append(
     )
 )
 
-if os.name != "nt" and not ROCM_VERSION:
+if os.name != "nt" and CUDA_VERSION:
+    # FasterTransformer kernels
     extensions.append(
         CUDAExtension(
             "awq_ft_ext",
