@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set variables
-AWQ_KERNELS_VERSION="0.0.1"
+AWQ_KERNELS_VERSION="0.0.3"
 RELEASE_URL="https://api.github.com/repos/casper-hansen/AutoAWQ_kernels/releases/tags/v${AWQ_KERNELS_VERSION}"
 
 # Create a directory to download the wheels
@@ -14,6 +14,7 @@ curl -s $RELEASE_URL | \
     jq -r ".assets[].browser_download_url" | \
     grep '\.whl' | \
     grep -v '%2Bcu' | \
+    grep -v '%2Brocm' | \
     xargs -n 1 -P 4 wget
 
 # Rename the wheels from 'linux_x86_64' to 'manylinux_x86_64'
