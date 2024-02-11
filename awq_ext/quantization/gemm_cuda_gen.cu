@@ -1037,7 +1037,7 @@ __global__ void __launch_bounds__(64) group_gemm_forward_4bit_cuda_m16nXk32(
 }
 
 
-torch::Tensor awq_group_gemm(
+torch::Tensor grouped_gemm_forward(
     torch::Tensor _in_feats,
     torch::Tensor _kernel,
     torch::Tensor _scaling_factors,
@@ -1080,7 +1080,7 @@ torch::Tensor awq_group_gemm(
         // threadIdx.x: 32
         // threadIdx.y: i_factors[2] * j_factors[2]
         dim3 threads_per_block(32, 2);
-        vllm::awq::group_gemm_forward_4bit_cuda_m16nXk32<128><<<num_blocks, threads_per_block, 0, stream>>>(
+        group_gemm_forward_4bit_cuda_m16nXk32<128><<<num_blocks, threads_per_block, 0, stream>>>(
             group_size, split_k_iters, in_feats, kernel, scaling_factors, zeros,
             topk_weights, sorted_token_ids_ptr, expert_ids_ptr, num_tokens_post_padded,
             _topk_weights.numel(), top_k, num_experts, pad_num_in_feats,
@@ -1094,7 +1094,7 @@ torch::Tensor awq_group_gemm(
         // threadIdx.x: 32
         // threadIdx.y: i_factors[2] * j_factors[2]
         dim3 threads_per_block(32, 2);
-        vllm::awq::group_gemm_forward_4bit_cuda_m16nXk32<64><<<num_blocks, threads_per_block, 0, stream>>>(
+        group_gemm_forward_4bit_cuda_m16nXk32<64><<<num_blocks, threads_per_block, 0, stream>>>(
             group_size, split_k_iters, in_feats, kernel, scaling_factors, zeros,
             topk_weights, sorted_token_ids_ptr, expert_ids_ptr, num_tokens_post_padded,
             _topk_weights.numel(), top_k, num_experts, pad_num_in_feats,

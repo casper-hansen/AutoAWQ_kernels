@@ -3,6 +3,18 @@
 torch::Tensor gemm_forward_cuda(torch::Tensor _in_feats, torch::Tensor _kernel,
     torch::Tensor _scaling_factors, torch::Tensor _zeros, int split_k_iters);
 
+torch::Tensor grouped_gemm_forward(
+    torch::Tensor _in_feats,
+    torch::Tensor _kernel,
+    torch::Tensor _scaling_factors,
+    torch::Tensor _zeros,
+    torch::Tensor _topk_weights,
+    torch::Tensor _sorted_token_ids_ptr,
+    torch::Tensor _expert_ids_ptr,
+    torch::Tensor _num_tokens_post_padded,
+    bool mul_weights,
+    int split_k_iters);
+
 torch::Tensor gemmv2_forward_cuda(torch::Tensor _in_feats, torch::Tensor _kernel,
     torch::Tensor _scaling_factors, torch::Tensor _zeros, int group_size, int split_k_iters);
 
