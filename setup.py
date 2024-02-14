@@ -172,6 +172,9 @@ if CUDA_VERSION:
                 "awq_ext/layernorm/layernorm.cu",
                 "awq_ext/position_embedding/pos_encoding_kernels.cu",
                 "awq_ext/quantization/gemv_cuda.cu",
+                "awq_ext/vllm/moe_alig_block.cu",
+                "awq_ext/vllm/activation.cu",
+                "awq_ext/vllm/topk_softmax_kernels.cu",
             ],
             extra_compile_args=extra_compile_args,
         )
