@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set variables
-AWQ_KERNELS_VERSION="0.0.3"
+AWQ_KERNELS_VERSION="0.0.5"
 RELEASE_URL="https://api.github.com/repos/casper-hansen/AutoAWQ_kernels/releases/tags/v${AWQ_KERNELS_VERSION}"
 
 # Create a directory to download the wheels
