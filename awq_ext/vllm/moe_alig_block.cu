@@ -1,5 +1,6 @@
 #include <torch/extension.h>
 #include <ATen/cuda/CUDAContext.h>
+#include <c10/cuda/CUDAGuard.h>
 
 #include <ATen/ATen.h>
 #include <THC/THCAtomics.cuh>
@@ -75,6 +76,10 @@ void moe_alig_block_size(
     torch::Tensor sorted_token_ids,
     torch::Tensor experts_ids,
     torch::Tensor num_tokens_post_pad) {
+    const at::cuda::OptionalCUDAGuard device_guard_topk_ids(device_of(topk_ids));
+    const at::cuda::OptionalCUDAGuard device_guard_sorted(device_of(sorted_token_ids));
+    const at::cuda::OptionalCUDAGuard device_guard_experts(device_of(experts_ids));
+    const at::cuda::OptionalCUDAGuard device_guard_num_tokens(device_of(num_tokens_post_pad));
     const cudaStream_t stream = at::cuda::getCurrentCUDAStream();
     assert(num_experts <= NUM_MAX_EXPERTS);
     VLLM_DISPATCH_INTEGRAL_TYPES(
