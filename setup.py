@@ -7,7 +7,7 @@ from torch.utils.cpp_extension import BuildExtension, CUDAExtension
 
 os.environ["CC"] = "g++"
 os.environ["CXX"] = "g++"
-AUTOAWQ_KERNELS_VERSION = "0.0.5"
+AUTOAWQ_KERNELS_VERSION = "0.0.6"
 PYPI_BUILD = os.getenv("PYPI_BUILD", "0") == "1"
 CUDA_VERSION = os.getenv("CUDA_VERSION", None) or torch.version.cuda
 ROCM_VERSION = os.environ.get("ROCM_VERSION", None) or torch.version.hip
@@ -89,7 +89,9 @@ def get_generator_flag():
     return generator_flag
 
 
-def get_compute_capabilities():
+def get_compute_capabilities(
+    compute_capabilities={75, 80, 86, 89, 90}
+):
     capability_flags = []
 
     if CUDA_VERSION:
@@ -103,7 +105,6 @@ def get_compute_capabilities():
                 )
 
         # Figure out compute capability
-        compute_capabilities = {75, 80, 86, 89, 90}
         for cap in compute_capabilities:
             capability_flags += ["-gencode", f"arch=compute_{cap},code=sm_{cap}"]
 
@@ -177,6 +178,22 @@ if CUDA_VERSION:
                 "awq_ext/vllm/topk_softmax_kernels.cu",
             ],
             extra_compile_args=extra_compile_args,
+        )
+    )
+
+    # only compatible with ampere
+    arch_flags = get_compute_capabilities({80, 86, 89, 90})
+    extra_compile_args_v2 = get_extra_compile_args(arch_flags, generator_flags)
+
+    extensions.append(
+        CUDAExtension(
+            "awq_v2_ext",
+            [
+                "awq_ext/pybind_awq_v2.cpp",
+                "awq_ext/quantization_new/gemv/gemv_cuda.cu",
+                "awq_ext/quantization_new/gemm/gemm_cuda.cu",
+            ],
+            extra_compile_args=extra_compile_args_v2,
         )
     )
 
