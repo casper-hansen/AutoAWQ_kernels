@@ -7,8 +7,6 @@
 #include "vllm/moe_alig_block.h"
 #include "vllm/activation.h"
 #include "vllm/topk_softmax_kernels.h"
-#include "quantization_new/gemm/gemm_cuda.h"
-#include "quantization_new/gemv/gemv_cuda.h"
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m)
 {
@@ -22,6 +20,4 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m)
     m.def("moe_alig_block_size", &moe_alig_block_size, "Aligning the number of tokens to be processed by each expert such that it is divisible by the block size.");
     m.def("silu_and_mul", &silu_and_mul, "Activation function used in SwiGLU.");
     m.def("topk_softmax", &topk_softmax, "Computes fused topk and softmax operation.");
-    m.def("gemm_forward_cuda_prefill", &gemm_forward_cuda_prefill, "New quantized GEMM kernel.");
-    m.def("gemv_forward_cuda_decode", &gemv_forward_cuda_decode, "New quantized GEMM kernel.");
 }
