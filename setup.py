@@ -175,6 +175,8 @@ if CUDA_VERSION:
                 "awq_ext/vllm/moe_alig_block.cu",
                 "awq_ext/vllm/activation.cu",
                 "awq_ext/vllm/topk_softmax_kernels.cu",
+                "awq_ext/quantization_new/gemv/gemv_cuda.cu",
+                "awq_ext/quantization_new/gemm/gemm_cuda.cu",
             ],
             extra_compile_args=extra_compile_args,
         )
