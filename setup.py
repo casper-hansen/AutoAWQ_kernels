@@ -189,6 +189,7 @@ if CUDA_VERSION:
         CUDAExtension(
             "awq_v2_ext",
             [
+                "awq_ext/pybind_awq_v2.cpp",
                 "awq_ext/quantization_new/gemv/gemv_cuda.cu",
                 "awq_ext/quantization_new/gemm/gemm_cuda.cu",
             ],
