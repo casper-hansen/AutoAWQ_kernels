@@ -118,7 +118,7 @@ def get_extra_compile_args(arch_flags, generator_flags):
         include_arch = os.getenv("INCLUDE_ARCH", "1") == "1"
         # Relaxed args on Windows
         if include_arch:
-            extra_compile_args = {"nvcc": arch_flags}
+            extra_compile_args = {"nvcc": ["-allow-unsupported-compiler"] + arch_flags}
 
     elif CUDA_VERSION:
         extra_compile_args = {
