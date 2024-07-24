@@ -90,7 +90,7 @@ def get_generator_flag():
 
 
 def get_compute_capabilities(
-    compute_capabilities={75, 80, 86, 89, 90}
+    compute_capabilities={75, 80, 86, 87, 89, 90}
 ):
     capability_flags = []
 
