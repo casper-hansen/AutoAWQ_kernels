@@ -92,7 +92,9 @@ def get_generator_flag():
     return generator_flag
 
 
-def get_compute_capabilities(compute_capabilities={75, 80, 86, 89, 90}):
+def get_compute_capabilities(
+    compute_capabilities={75, 80, 86, 87, 89, 90}
+):
     capability_flags = []
 
     if CUDA_VERSION:
