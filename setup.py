@@ -59,7 +59,7 @@ common_setup_kwargs = {
 }
 
 requirements = [
-    f"torch=={TORCH_VERSION}",
+    f"torch>={TORCH_VERSION}",
 ]
 
 
