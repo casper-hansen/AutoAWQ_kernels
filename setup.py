@@ -94,7 +94,7 @@ def get_generator_flag():
 
 
 def get_compute_capabilities(
-    compute_capabilities={int(cap) for cap in COMPUTE_CAPABILITIES.split(",")}
+    compute_capabilities=set(map(int, COMPUTE_CAPABILITIES.split(",")))
 ):
     capability_flags = []
 
