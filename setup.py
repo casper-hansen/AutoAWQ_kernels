@@ -11,6 +11,7 @@ if "CXX" not in os.environ:
     os.environ["CXX"] = "g++"
 AUTOAWQ_KERNELS_VERSION = "0.0.7"
 PYPI_BUILD = os.getenv("PYPI_BUILD", "0") == "1"
+COMPUTE_CAPABILITIES = os.getenv("COMPUTE_CAPABILITIES", "75,80,86,87,89,90")
 TORCH_VERSION = str(os.getenv("TORCH_VERSION", None) or torch.__version__).split('+', maxsplit=1)[0]
 CUDA_VERSION = os.getenv("CUDA_VERSION", None) or torch.version.cuda
 ROCM_VERSION = os.environ.get("ROCM_VERSION", None) or torch.version.hip
@@ -93,7 +94,7 @@ def get_generator_flag():
 
 
 def get_compute_capabilities(
-    compute_capabilities={75, 80, 86, 87, 89, 90}
+    compute_capabilities={int(cap) for cap in COMPUTE_CAPABILITIES.split(",")}
 ):
     capability_flags = []
 
