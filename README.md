@@ -23,12 +23,25 @@ pip install autoawq-kernels
 ```
 
 ### Build from source
-You can also build from source:
+
+To build the kernels from source, you first need to setup an environment containing the necessary dependencies.
+
+#### Build Requirements
+
+- Python>=3.8.0
+- Numpy
+- Wheel
+- PyTorch
+- ROCm: You need to install the following packages `rocsparse-dev hipsparse-dev rocthrust-dev rocblas-dev hipblas-dev`.
+
+#### Building process
 
 ```
-git clone https://github.com/casper-hansen/AutoAWQ_kernels
-cd AutoAWQ_kernels
-pip install -e .
+pip install git+https://github.com/casper-hansen/AutoAWQ_kernels.git
 ```
 
-To build for ROCm, you need to first install the following packages `rocsparse-dev hipsparse-dev rocthrust-dev rocblas-dev hipblas-dev`.
+Notes on environment variables:
+- `TORCH_VERSION`: By default, we build using the current version of torch by `torch.__version__`. You can override it with `TORCH_VERSION`.
+    - `CUDA_VERSION` or `ROCM_VERSION` can also be used to build for a specific version of CUDA or ROCm.
+- `CC` and `CXX`: You can specify which build system to use for the C code, e.g. `CC=g++-13 CXX=g++-13 pip install -e .`
+- `COMPUTE_CAPABILITIES`: You can specify specific compute capabilities to compile for: `COMPUTE_CAPABILITIES="75,80,86,87,89,90" pip install -e .`
