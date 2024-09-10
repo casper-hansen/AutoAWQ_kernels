@@ -7,7 +7,7 @@ from torch.utils.cpp_extension import BuildExtension, CUDAExtension
 
 os.environ["CC"] = "g++"
 os.environ["CXX"] = "g++"
-AUTOAWQ_KERNELS_VERSION = "0.0.7"
+AUTOAWQ_KERNELS_VERSION = "0.0.8"
 PYPI_BUILD = os.getenv("PYPI_BUILD", "0") == "1"
 CUDA_VERSION = os.getenv("CUDA_VERSION", None) or torch.version.cuda
 ROCM_VERSION = os.environ.get("ROCM_VERSION", None) or torch.version.hip
@@ -51,12 +51,13 @@ common_setup_kwargs = {
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Programming Language :: C++",
     ],
 }
 
 requirements = [
-    "torch==2.3.1",
+    "torch==2.4.1",
 ]
 
 
