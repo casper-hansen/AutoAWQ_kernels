@@ -10,24 +10,16 @@ AutoAWQ Kernels is a new package that is split up from the [main repository](htt
   - GPU: Must be compute capability 7.5 or higher.
   - CUDA Toolkit: Must be 11.8 or higher.
 - AMD:
-  - ROCm: Must be 5.6 or higher.
+  - ROCm: Must be 5.6 or higher. [Build from source](#build-from-source)
 
 ## Install
 
 ### Install from PyPi
 
-The package is available on PyPi with CUDA 12.1.1 wheels:
+The package is available on PyPi with CUDA 12.4.1 wheels:
 
 ```
 pip install autoawq-kernels
-```
-
-### Install release wheels
-
-For ROCm and other CUDA versions, you can use the wheels published at each [release](https://github.com/casper-hansen/AutoAWQ_kernels/releases/):
-
-```
-pip install https://github.com/casper-hansen/AutoAWQ_kernels/releases/download/v0.0.2/autoawq_kernels-0.0.2+rocm561-cp310-cp310-linux_x86_64.whl
 ```
 
 ### Build from source
