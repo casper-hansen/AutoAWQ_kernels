@@ -9,7 +9,7 @@ if "CC" not in os.environ:
     os.environ["CC"] = "g++"
 if "CXX" not in os.environ:
     os.environ["CXX"] = "g++"
-AUTOAWQ_KERNELS_VERSION = "0.0.8"
+AUTOAWQ_KERNELS_VERSION = "0.0.9"
 PYPI_BUILD = os.getenv("PYPI_BUILD", "0") == "1"
 COMPUTE_CAPABILITIES = os.getenv("COMPUTE_CAPABILITIES", "75,80,86,87,89,90")
 TORCH_VERSION = str(os.getenv("TORCH_VERSION", None) or torch.__version__).split('+', maxsplit=1)[0]
