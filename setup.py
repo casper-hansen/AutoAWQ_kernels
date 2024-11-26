@@ -229,20 +229,6 @@ extensions.append(
     )
 )
 
-if os.name != "nt" and CUDA_VERSION:
-    # FasterTransformer kernels
-    extensions.append(
-        CUDAExtension(
-            "awq_ft_ext",
-            [
-                "awq_ext/pybind_awq_ft.cpp",
-                "awq_ext/attention/ft_attention.cpp",
-                "awq_ext/attention/decoder_masked_multihead_attention.cu",
-            ],
-            extra_compile_args=extra_compile_args,
-        )
-    )
-
 additional_setup_kwargs = {
     "ext_modules": extensions,
     "cmdclass": {"build_ext": BuildExtension},
